@@ -16,8 +16,8 @@ def extract_info(document):
         "spread": r"spread (?:base )?de\s*([\d\.,]+)%",
         "mtic (base)": r"(?:mtic \(base\)\s*€\s*|montante total a\s*)([\d\.,]+)",
         "mtic (contratada)": r"mtic \(contratada\)\s*€\s*([\d\.,]+)",
-        "taeg (base)": r"taeg \(base\)\s*([\d\.,]+)%",
-        "taeg (contratada)": r"taeg \(contratada\)\s*([\d\.,]+)%",
+        "taeg (base)": r"(?:taeg \(base\)|taeg aplicável ao seu|TAEG:)\s*([\d\.,]+)%",
+        "taeg (contratada)": r"(?:taeg \(contratada\)|TAEG c/ vendas associadas facultativas|taxa anual de encargos)\s*([\d\.,]+)%",
         "montante da prestação": r"montante da prestação\s*([\d\.,]+)\s*EUR",
         "index": r"euribor (3|6|12) meses"
     }
