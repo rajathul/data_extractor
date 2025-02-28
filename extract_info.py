@@ -4,22 +4,22 @@ def extract_info(document):
     extracted_data = {}
 
     patterns = {
-        "tipo de taxa": r"Tipo de taxa de juro:\s*(.*?)(?=\.|\n)",
-        "montante e moeda": r"Montante e moeda do\s*empréstimo a conceder:\s*([\d\s\.,]+)\s*([a-zA-Z]{3})",
-        "duração do empréstimo": r"Duração do empréstimo:\s*(\d+\s*meses)",
-        "primeira tan": r"TAN\s*(?:\(base\)|contratada)?\s?:?\s*([\d\.,]+)",
-        "segundo tan": r"(?:Em resultado da contratação facultativa dos produtos e serviços financeiros descritos na Secção \"8. Obrigações adicionais\", a TAN será de:|A TAN será de):?\s*([\d\.,]+)",
-        "terceira tan": r"(?:A TAN será de|a tan será de):?\s*([\d\.,]+)",
-        "quarta tan": r"a TAN será de:\s*([\d\.,]+)%,\s*resultante da soma",
-        "número de prestações": r"Número de prestações:\s*(\d+)",
-        "valor do imóvel": r"Valor do imóvel\s*:\s*([\d\.,]+)\s*EUR",
-        "spread": r"spread\s*(?:base)?\s*de\s*([\d\.,]+)",
-        "mtic (base)": r"MTIC \(base\)\s*:\s*([\d\.,]+)",
-        "mtic (contratada)": r"MTIC \(contratada\)\s*:\s*([\d\.,]+)",
-        "taeg (base)": r"TAEG \(base\)\s*:\s*([\d\.,]+)",
-        "taeg (contratada)": r"TAEG \(contratada\)\s*:\s*([\d\.,]+)",
-        "montante da prestação": r"Montante da prestação\s*inicial:\s*([\d\.,]+)\s*EUR",
-        "index": r"indexante:\s*(.*?)"
+        "tipo de taxa": r"tipo de taxa de juro:\s*([\w\s]+?)(?:\.|\n)",
+        "montante e moeda": r"montante e moeda do\s*([\d\s\.,]+)\s*([a-zA-Z]{3})",
+        "duração do empréstimo": r"duração do empréstimo:\s*(\d+\s*meses)",
+        "primeira tan": r"(?:taxa de juro\s*\(tan\)|taxa de juro fixa):\s*([\d\s\.,]+)%",
+        "segundo tan": r"tan será de:\s*([\d\s\.,]+)%",
+        "terceira tan": r"taxa de juro variável:\s*([\d\s\.,]+)%",
+        "quarta tan": r"a tan será de:\s*([\d\s\.,]+)%,\s*resultante da soma",
+        "número de prestações": r"número de prestações.*?(\d+)",
+        "valor do imóvel": r"valor do imóvel\s*(?:€\s*|:\s*)([\d\s\.,]+)\s*€?",
+        "spread": r"spread (?:base )?de\s*([\d\s\.,]+)%",
+        "mtic (base)": r"(?:(?:mtic \(base\)\s*€\s*)|(?:montante total a\s*))([\d\s\.,]+)",
+        "mtic (contratada)": r"mtic \(contratada\)\s*€\s*([\d\s\.,]+)",
+        "taeg (base)": r"(?:taeg \(base\)|taeg aplicável ao seu|TAEG:)\s*([\d\s\.,]+)%",
+        "taeg (contratada)": r"(?:taeg \(contratada\)|TAEG c/ vendas associadas facultativas|taxa anual de encargos)\s*([\d\s\.,]+)%",
+        "montante da prestação": r"montante da prestação\s*([\d\s\.,]+)\s*EUR",
+        "index": r"euribor (3|6|12) meses"
     }
 
     for key, pattern in patterns.items():
