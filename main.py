@@ -63,14 +63,45 @@ if uploaded_file:
         # Extract information
         extracted_data = extract_info(document_text)
         
-        #
         for key, value in extracted_data.items():
             if isinstance(value, tuple):
                 extracted_data[key] = ", ".join(map(str, value))  # Convert tuple to a comma-separated string
 
-        # Convert dictionary to DataFrame
-        df = pd.DataFrame(list(extracted_data.items()), columns=["Field", "Value"])
-        st.dataframe(df)  # Display data
+        # # Display extracted data
+        # st.write("### Extracted Data (Read-Only)")
+        # df = pd.DataFrame(list(extracted_data.items()), columns=["Field", "Value"])
+        # st.dataframe(df)
+
+        # Toggle to enable manual editing
+        edit_mode = st.checkbox("Manually Edit Extracted Data")
+
+        # Option for manually enter the data
+        if edit_mode:
+            # Create two columns: Left for input, Right for updated table
+            col1, col2 = st.columns([1,2])
+
+            updated_data = {}
+
+            with col1:
+                st.write("### Update Fields")
+                for key, value in extracted_data.items():
+                    updated_data[key] = st.text_input(f"{key}:", value if value else "")
+
+            with col2:
+                st.write("### Live Updated Table")
+                with st.container():
+                    df = pd.DataFrame(list(updated_data.items()), columns=["Field", "Value"])
+                    st.dataframe(df, use_container_width=True, height=700)
+        else:
+            # Show extracted data in a normal table if editing is disabled
+            st.write("### Extracted Data")
+            with st.container():
+                df = pd.DataFrame(list(extracted_data.items()), columns=["Field", "Value"])
+                st.dataframe(df, use_container_width=True, height=700)
+            updated_data = extracted_data  # Keep original data
+
+        # # Convert dictionary to DataFrame
+        # final_df = pd.DataFrame(list(updated_data.items()), columns=["Field", "Value"])
 
         # Convert to CSV for download
         csv_buffer = io.StringIO()

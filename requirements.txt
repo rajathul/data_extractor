@@ -6,3 +6,4 @@ pytesseract
 pdfplumber
 openpyxl
 streamlit
+pymupdf
