@@ -6,15 +6,15 @@ def extract_info(document):
     document = document.strip()
 
     patterns = {
-        "tipo de taxa": r"tipo de taxa de juro:\s*([\w\s]+?)(?:\.|\n)",
+        "tipo de taxa": r"tipo de taxa de juro:\s*([\w\sáéíóúã]+(?:[\s\w]+(?:[\d]+)?(?:[\s\w]+)*))\s*(?:\.|\n)",
         "montante e moeda": r"montante e moeda\s*(?:do\s*)?([\d\s\.,]+)\s*([a-zA-Z]{3}|€)",
-        "duração do empréstimo": r"duração (?:do empréstimo|do)\s*(\d+)\s*meses?",
+        "duração do empréstimo": r"duração (?:do empréstimo|do)\s*:?\s*(\d+)\s*meses?",
         "primeira tan": r"(?:taxa de juro\s*\(tan\)|taxa de juro fixa):\s*([\d\s\.,]+)%",
         "segundo tan": r"tan será de:\s*([\d\s\.,]+)%",
         "terceira tan": r"(?:taxa de juro variável:\s*|durante o período de taxa variável:\s*)([\d\s\.,]+)%",
         "quarta tan": r"(?:a tan será de:\s*|a tan será de\s*)([\d\s\.,]+)%\,\s*resultante da soma",
         "número de prestações": r"número de prestações.*?(\d+)",
-        "valor do imóvel": r"valor do imóvel\s*(?:€\s*|:\s*)([\d\s\.,]+)\s*€?",
+        "valor do imóvel": r"(?:valor do imóvel|para efeitos da presente ficha)\s*([\d\s\.,]+)€?",
         "spread": r"spread (?:base )?de\s*([\d\s\.,]+)%",
         "mtic (base)": r"(?:(?:mtic \(base\)\s*€\s*)|(?:montante total a\s*))([\d\s\.,]+)",
         "mtic (base) 1": r"([\d\.,]+€)\s*de custo total do",
@@ -37,6 +37,7 @@ def extract_info(document):
         else:
             extracted_data[key] = "not found"
 
+    # Special handling for "mista" type in "tipo de taxa" field
     if extracted_data.get("tipo de taxa") == "mista":
         tan_matches = re.findall(r"taxa de juro \(tan\):\s*([\d.,]+)%", document, re.IGNORECASE)
         if len(tan_matches) == 2:
