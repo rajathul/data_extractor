@@ -1,29 +1,25 @@
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+import time
 
-url = "https://www.barchart.com/futures/quotes/IMG25/historical-prices?orderBy=contractExpirationDate&orderDir=asc&page=4"
+# Set up the driver (ensure appropriate browser driver is installed)
+driver = webdriver.Chrome()
 
-# Send a GET request to the website
-response = requests.get(url)
-soup = BeautifulSoup(response.content, 'html.parser')
+# Navigate to the historical prices page
+driver.get("https://www.barchart.com/futures/quotes/IMG25/historical-prices?orderBy=contractExpirationDate&orderDir=asc&page=4")
 
-# Find the table containing historical prices
-table = soup.find('table', {'class': 'bc-table'})
+# Wait for the page to load (adjust time as needed)
+time.sleep(5)
 
-# Extract table headers and rows
-headers = [header.text.strip() for header in table.find_all('th')]
-rows = []
-for row in table.find_all('tr')[1:]:  # Skip the header row
-    cells = row.find_all('td')
-    rows.append([cell.text.strip() for cell in cells])
+# Click the "Price History" link (adapt the XPath/CSS selector as needed)
+price_history_link = driver.find_element(By.LINK_TEXT, "Price History")
+price_history_link.click()
 
-# Create a DataFrame
-df = pd.DataFrame(rows, columns=headers)
+time.sleep(2)
 
-# Extract the first 4 columns
-first_four_columns = df.iloc[:, :4]
+# Navigate to the "Daily Prices" tab and locate the CSV download button
+csv_button = driver.find_element(By.XPATH, "//a[contains(text(), 'Download CSV')]")
+csv_button.click()
 
-# Save to CSV or print
-first_four_columns.to_csv('first_four_columns.csv', index=False)
-print(first_four_columns)
+# Close the browser (after download completes)
+driver.quit()
