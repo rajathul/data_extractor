@@ -4,10 +4,17 @@ from datetime import datetime
 import pandas as pd
 
 
+def create_output_dir():
+    output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output')
+
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+
 def save_to_csv(data):
+    create_output_dir()
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir = "output"
-    filename = os.path.join(output_dir, f"extracted_data_{timestamp}.csv")
+    filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output', f"data_{timestamp}.csv")
 
     if isinstance(data, dict):
         df = pd.DataFrame(list(data.items()), columns=["Field", "Value"])
@@ -16,11 +23,10 @@ def save_to_csv(data):
     else:
         print("No valid data to save.")
 
-
 def save_to_txt(extracted_text):
+    create_output_dir()
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir = "output"
-    filename = os.path.join(output_dir, f"extracted_data_{timestamp}.txt")
+    filename = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output', f"data_{timestamp}.txt")
 
     if extracted_text:
         try:

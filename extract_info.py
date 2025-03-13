@@ -27,6 +27,15 @@ def extract_info(document):
             extracted_data["primeira tan"] = tan_matches[0]
             extracted_data["segundo tan"] = tan_matches[1]
 
+    # Displaying only 'fixa', 'variável' or 'mixa'
+    if 'fixa' in extracted_data.get("tipo de taxa"):
+        if 'variável' in extracted_data.get("tipo de taxa"):
+            extracted_data["tipo de taxa"] = 'Taxa mista'
+        else:
+            extracted_data["tipo de taxa"] = 'Taxa fixa'
+    else:
+        extracted_data["tipo de taxa"] = 'Taxa variável'
+
     mtic_base = extracted_data.get("mtic (base)", "").strip()
     mtic_base_1 = extracted_data.get("mtic (base) 1", "").strip()
 
@@ -39,3 +48,5 @@ def extract_info(document):
     extracted_data.pop("mtic (base) 1", None)
 
     return extracted_data
+
+

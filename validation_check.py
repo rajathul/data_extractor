@@ -47,7 +47,7 @@ def is_document_expired(document):
         month = month_numeric if month_numeric else month_map.get(month_word.lower())
 
         if month:
-            validity_date = datetime.strptime(f"{day}/{month}/{year}", "%d/%m/%Y")
-            return validity_date < datetime.today()
+            validity_date = datetime.strptime(f"{day}/{month}/{year} 23:59:59", "%d/%m/%Y %H:%M:%S")
+            return validity_date <= datetime.today()
 
     return False
